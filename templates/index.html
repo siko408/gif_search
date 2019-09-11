@@ -4,16 +4,25 @@
 
 <!-- TODO: Make an HTML form containing a search box and a submit button to add
     the search term to the query string -->
-<form action="index.html">
+<form action="">
     <p>
         Serch for gifs by key word?
-    <input type="text" name="seach_term">
+    <input type="text" name="search_term">
     <input type="submit">
     <p>
 </form>
 <!-- TODO: Make a for loop to loop over GIFs passed in from the server -->
-{% for gif in {{}}%}
+{% for gif in range(10)%}
 <!-- TODO: For each gif, include the 'gif.html' template to display it -->
+{% set gif_id = gifs["results"][gif]["id"] %}
+{% set gif_url = gifs["results"][gif]["media"][0]["gif"]["url"]%}
+{% set gif_itemurl = gifs["results"][gif]["itemurl"]
+    %}
+<div class="tenor-gif-embed" data-postid="{{ gif_id }}" data-share-method="host" data-width="500px"
+    data-aspect-ratio="1.2266666666666666">
+    <a href="{{ gif_itemurl }}"></a>
+    <a href="{{ gif_url }}"></a>
+</div>
 {% endfor %}
 
 {% endblock %}
