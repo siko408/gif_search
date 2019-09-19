@@ -1,0 +1,44 @@
+body {
+    background-color: #16a085;
+}
+
+ .back{
+    background-color:black;
+    border: 15px solid black;
+    width:50%;
+
+}
+.scale{
+    background-image: linear-gradient(to right,blue,green);/*#2ecc71;*/
+    border:15px solid black;
+    border-radius:12px;
+    padding:30px 120px;
+    font-size:43px;
+}
+.button{
+    padding:30px 120px;
+    background-color: green;
+    border:15px solid black;
+    border-radius: 8px;
+
+}
+
+.size{
+    font-size:40px;
+}
+.button:hover{
+    background-color: #27ae60;
+    transition:.8s;
+}
+
+::placeholder{
+    opacity:.5;
+    color:black;
+}
+#btn_2{
+position:relative;
+left:inherit;
+padding: 50px 30px;
+background-image:url("Mic.png");
+background-repeat:no-repeat;
+}
