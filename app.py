@@ -6,6 +6,10 @@ import json
 import os
 
 app = Flask(__name__)
+
+
+
+
 @app.route('/')
 def index():
     unknown_char = set(punctuation)
@@ -13,6 +17,7 @@ def index():
     temp = False
     print(unknown_char)
     """Return homepage."""
+
     lmt = 10
     search_term = request.args.get("search_term")
         # TODO: Extract query term from url
@@ -70,6 +75,16 @@ def index():
     elif request_gifs.status_code == 404:
         return """ <div>
 
+    # TODO: Extract query term from url
+    search_term = "dog"
+    search_term = request.args.get("search_term")
+    # TODO: Make 'params' dict with query term and API key
+    params = {"api_key": "LIVDSRZULELA", "query": search_term}
+    # TODO: Make an API call to Tenor using the 'requests' library
+    request_gifs = requests.get("https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (params["query"], params["api_key"], 10))
+    # TODO: Get the first 10 results from the search results
+
+
             <p>
             THERE WAS AN ERROR, PLEASE RETURN BACK!!!
 
@@ -86,6 +101,7 @@ def index():
     json_len = len(top_8gifs["results"])
     #itemurl = top_8gifs["results"]["itemurl"]
     # TODO: Render the 'index.html' template, passing the gifs as a named parameter
+
     if(temp is not True):
         of_word = search_term
     print("Condition:", of_word)
@@ -99,6 +115,19 @@ def filter(word):
     x = word[0:len(word) - 1]
 
     return x
+
+    # set the apikey and limit
+    gifid = ""
+    gifurl = ""
+    gifitemurl = ""
+    if request_gifs.status_code == 200:
+        gifs_json = json.loads(request_gifs.content)
+    else:
+        gifs_json = None
+
+    # return gifs_json
+    return render_template("index.html", gifs=gifs_json, gif_id=gifid, gif_url=gifurl, gif_itemurl=gifitemurl)
+
 
 
 if __name__ == '__main__':
