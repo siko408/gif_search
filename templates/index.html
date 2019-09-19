@@ -16,13 +16,8 @@
 <!-- TODO: For each gif, include the 'gif.html' template to display it -->
 {% set gif_id = gifs["results"][gif]["id"] %}
 {% set gif_url = gifs["results"][gif]["media"][0]["gif"]["url"]%}
-{% set gif_itemurl = gifs["results"][gif]["itemurl"]
-    %}
-<div class="tenor-gif-embed" data-postid="{{ gif_id }}" data-share-method="host" data-width="500px"
-    data-aspect-ratio="1.2266666666666666">
-    <a href="{{ gif_itemurl }}"></a>
-    <a href="{{ gif_url }}"></a>
-</div>
+{% set gif_itemurl = gifs["results"][gif]["itemurl"] %}
+{% include 'gif.html' %}
 {% endfor %}
 
 {% endblock %}
