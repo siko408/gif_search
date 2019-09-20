@@ -1,31 +1,33 @@
 {% extends "base.html" %}
 <!-- TODO: Extend 'base.html' and put content into a block 'body' to match -->
 {% block body%}
+
     <link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
 
     <form action="/">
-
         <p class = "size">
-            Search for gifs by key word?
+            Here you can search for gifs by key words.
         </p>
-        <input type="text" name="search_term" class = "scale" placeholder="Type desire gif..">
+        <input type="text" name="search_term" class = "scale" placeholder="Enter a keyword...">
         <input type="submit" class = "button">
     </form>
 
     {% if gifs == [] %}
         <title>Gif search </title>
-        <p> No current gifs for word: {{of_word}} </p>
+        <p> No current gifs for word: {{search_term}} </p>
     {% else %}
-
         <div class="gifs">
-            <div>
-                <p>
-                    Current word:{{of_word}}
-                </p>
+            {% if search_term != "" and search_term != None %}
+                <div>
+                    <p>
+                        Last searched word: {{search_term}}
+                    </p>
                 </div>
+            {% endif %}
 
             {% for gif in gifs %}
                 {% include 'gif.html' %}
+                <br/ >
             {%endfor%}
         </div>
 <!-- TODO: For each gif, include the 'gif.html' template to display it --
