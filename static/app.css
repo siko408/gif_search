@@ -9,7 +9,7 @@ body {
 
 }
 .scale{
-    background-image: linear-gradient(to right,blue,green);/*#2ecc71;*/
+    background-image: linear-gradient(to right,green,blue);/*#2ecc71;*/
     border:15px solid black;
     border-radius:12px;
     padding:30px 120px;
