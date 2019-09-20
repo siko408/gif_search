@@ -1,53 +1,34 @@
+{% extends "base.html" %}
 <!-- TODO: Extend 'base.html' and put content into a block 'body' to match -->
-<link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
-<form action="/">
+{% block body%}
+    <link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
 
-    <p class = "size">
-        Search for gifs by key word?
+    <form action="/">
+
+        <p class = "size">
+            Search for gifs by key word?
         </p>
-    <input type="text" name="search_term" class = "scale" placeholder="Type desire gif..">
-    <input type="submit" class = "button">
-</form>
-{% if json_len == 0 %}
+        <input type="text" name="search_term" class = "scale" placeholder="Type desire gif..">
+        <input type="submit" class = "button">
+    </form>
+
+    {% if gifs == [] %}
         <title>Gif search </title>
         <p> No current gifs for word: {{of_word}} </p>
-{% elif json_len != 0%}
-{% extends "base.html" %}
-    {% block body%}
-<div class="gifs">
-    <div>
-        <p>
-            Current word:{{of_word}}
-        </p>
-    </div>
-{% for x in range(json_len)%}
-{% set gif_id = top_8gifs["results"][x]["id"] %}
-{% set gif_itemurl = top_8gifs["results"][x]["itemurl"] %}
-{% set gif_url = top_8gifs["results"][x]["media"][0]["gif"]["url"] %}
-<!-- TODO: Make an HTML form containing a search box and a submit button to add
-    the search term to the query string -->
+    {% else %}
 
-<form action="">
-    <p>
-        Serch for gifs by key word?
-    <input type="text" name="search_term">
-    <input type="submit">
-    <p>
-</form>
-<!-- TODO: Make a for loop to loop over GIFs passed in from the server -->
-{% for gif in range(10)%}
-<!-- TODO: For each gif, include the 'gif.html' template to display it -->
-{% set gif_id = gifs["results"][gif]["id"] %}
-{% set gif_url = gifs["results"][gif]["media"][0]["gif"]["url"]%}
-{% set gif_itemurl = gifs["results"][gif]["itemurl"] %}
-{% include 'gif.html' %}
-{% endfor %}
+        <div class="gifs">
+            <div>
+                <p>
+                    Current word:{{of_word}}
+                </p>
+                </div>
 
-
-{% include 'gif.html' %}
-{%endfor%}
-</div>
+            {% for gif in gifs %}
+                {% include 'gif.html' %}
+            {%endfor%}
+        </div>
 <!-- TODO: For each gif, include the 'gif.html' template to display it --
 <!-- TODO: Make a for loop to loop over GIFs passed in from the server -->
+    {% endif %}
 {% endblock %}
-{%endif%}
