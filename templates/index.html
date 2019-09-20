@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block body%}
-
-    <link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
-
+    <!-- Displays the form so you can search for gifs.-->
     <form action="/">
         <p class = "size">
             Here you can search for gifs by key words.
@@ -13,12 +11,14 @@
             <input type="submit" class = "button" name="random_term" value="Random Term!">
         </form>
     </form>
-
+    <!-- If there are no gifs to display we tell the user that there are no gifs for that search term.-->
     {% if gifs == [] %}
         <title>Gif search </title>
         <p> No current gifs for word: {{search_term}} </p>
+        
     {% else %}
         <div class="gifs">
+            <!-- If there are gifs to display then we tell them the term they searched. -->
             {% if search_term != "" and search_term != None %}
                 <div>
                     <p>
@@ -26,7 +26,7 @@
                     </p>
                 </div>
             {% endif %}
-
+            <!-- Then we loop over each gif in the list gifs and display it.-->
             {% for gif in gifs %}
                 {% include 'gif.html' %}
                 <br/ >

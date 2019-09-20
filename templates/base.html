@@ -3,9 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>GIF Search</title>
+        <!-- Here we add in our stylesheet.-->
         <link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
     </head>
     <body>
+        <!-- Here is where base.html will be extended from.-->
         {% block body %}{% endblock %}
         <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
     </body>
