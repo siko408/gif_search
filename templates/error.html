@@ -1,0 +1,13 @@
+<!-- This will show in most cases where we run into an actual error-->
+{% extends "base.html" %}
+{% block body %}
+    <div>
+        <p>
+            There was an unidentifiable error.
+            Please try to go back to the previous page.
+        </p>
+    </div>
+    <form action="/">
+        <input type="submit" value="Back to home page?" class = "button">
+    </form>
+{% endblock %}

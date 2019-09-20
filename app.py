@@ -1,134 +1,96 @@
 from flask import Flask, render_template, request
 from random import randint
-from string import punctuation
 import requests
 import json
-import os
 
 app = Flask(__name__)
 
 
-
-
 @app.route('/')
 def index():
-    unknown_char = set(punctuation)
-    unknown_char.discard("'")
-    temp = False
-    print(unknown_char)
-    """Return homepage."""
 
-    lmt = 10
+    """
+    This is the homepage. It extracts the search term that was supplied by
+    the user or if they chose to generate a random term it calls rand_word().
+    """
     search_term = request.args.get("search_term")
-        # TODO: Extract query term from url
-    print(search_term)
-    print(filter.__doc__)
-    if(search_term is None):
-        count = 0
-        word_file = open("words.txt", "r") #Ask why readlines must be underneath open file
-        line = word_file.readlines()
-        for x in line:
-            count += 1
+    random_term = request.args.get("random_term")
+
+    if(random_term is not None):
         try:
-            random_limit = len(line) - 1
-            of_word = filter(line[randint(1, random_limit)])
-            params = {"api_key": "LIVDSRZULELA", "query": of_word}
-            temp = True
-        except:
-            of_word = search_term
-            print("An error occured")
+            search_term = rand_word()
+
+        except Exception:
+            return render_template("error.html")
+        params = {"api_key": "LIVDSRZULELA", "query": search_term, "limit": 10}
+
+    elif(search_term is None):
+        params = {"api_key": "LIVDSRZULELA", "query": "", "limit": 10}
 
     else:
-        params = {"api_key": "LIVDSRZULELA", "query": search_term}
+        params = {"api_key": "LIVDSRZULELA", "query": search_term, "limit": 10}
 
-
-        # set the apikey and limit
-    #search_term = request.args.get("search_term")
-# our test search
-# get thtop 8 GIFs for the search term
+    """
+    After determining what the search_term is then we request it from
+    https://api.tenor.com
+    """
     try:
         request_gifs = requests.get(
-            "https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (params["query"], params["api_key"], lmt))
-        print("Success")
+            "https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" %
+            (params["query"], params["api_key"], params["limit"]))
+
     except Exception:
-        print("Error with API")
-        return """
-                <div>
+        return render_template("error.html")
 
-                <p>
-                    There was an ERROR!!!
-                </p>
-
-
-                </div>
-         """
-
-    gif_id = ""
-    gif_itemurl = ""
-    gif_url = ""
+    """
+    Then we extract the json data from our request.
+    """
     if request_gifs.status_code == 200:
-    # load the GIFs using the urls for the smaller GIF sizes
         try:
-            top_8gifs = json.loads(request_gifs.content)
+            gifs = json.loads(request_gifs.content)
+
         except Exception:
-            print("Error passing json file")
+            render_template("error.html")
+
     elif request_gifs.status_code == 404:
-        return """ <div>
+        return render_template("error.html")
 
-    # TODO: Extract query term from url
-    search_term = "dog"
-    search_term = request.args.get("search_term")
-    # TODO: Make 'params' dict with query term and API key
-    params = {"api_key": "LIVDSRZULELA", "query": search_term}
-    # TODO: Make an API call to Tenor using the 'requests' library
-    request_gifs = requests.get("https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (params["query"], params["api_key"], 10))
-    # TODO: Get the first 10 results from the search results
-
-
-            <p>
-            THERE WAS AN ERROR, PLEASE RETURN BACK!!!
-
-
-            </p>
-
-
-
-        </div> """
     else:
+        gifs = None
 
-        top_8gifs = None
-    #if(len(top_8gifs["results"]) != 0):
-    json_len = len(top_8gifs["results"])
-    #itemurl = top_8gifs["results"]["itemurl"]
-    # TODO: Render the 'index.html' template, passing the gifs as a named parameter
+    """
+    After extracting the data from the json file we pare it down to just what
+    is in the results dictionary entry.
+    """
+    gifs = gifs["results"]
 
-    if(temp is not True):
-        of_word = search_term
-    print("Condition:", of_word)
-    return render_template("index.html", top_8gifs=top_8gifs, gif_id=gif_id, gif_itemurl=gif_itemurl, gif_url=gif_url, json_len=json_len, of_word=of_word)
+    """
+    Then we render our index.html template and pass our gifs and the last
+    searched term so that we can display them later.
+    """
+    return render_template("index.html", gifs=gifs, search_term=search_term)
+
+
+def rand_word():
+    """
+    This funtion should return a random word from the words.txt file.
+    It might be called from the index() function if the user asks for a random
+    search term.
+    """
+    word_file = open("words.txt", "r")
+    line = word_file.readlines()
+    random_limit = len(line) - 1
+    search_term = filter(line[randint(1, random_limit)])
+    return search_term
+
 
 def filter(word):
     """
-    This function removes all
-    '/n' from a text line
+    This function removes all '/n' from a text line
     """
     x = word[0:len(word) - 1]
-
     return x
-
-    # set the apikey and limit
-    gifid = ""
-    gifurl = ""
-    gifitemurl = ""
-    if request_gifs.status_code == 200:
-        gifs_json = json.loads(request_gifs.content)
-    else:
-        gifs_json = None
-
-    # return gifs_json
-    return render_template("index.html", gifs=gifs_json, gif_id=gifid, gif_url=gifurl, gif_itemurl=gifitemurl)
-
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port = 9090)
+    app.run(debug=True)

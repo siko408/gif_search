@@ -1,58 +1,36 @@
-<!-- TODO: Extend 'base.html' and put content into a block 'body' to match -->
-<link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
-<form action="/">
-
-    <p class = "size">
-        Search for gifs by key word?
-        </p>
-    <input type="text" name="search_term" class = "scale" placeholder="Type desire gif..">
-    <input type="submit" class = "button">
-</form>
-{% if json_len == 0 %}
-        <title>Gif search </title>
-        <p> No current gifs for word: {{of_word}} </p>
-{% elif json_len != 0%}
 {% extends "base.html" %}
-    {% block body%}
-<div class="gifs">
-    <div>
-        <p>
-            Current word:{{of_word}}
+{% block body%}
+    <!-- Displays the form so you can search for gifs.-->
+    <form action="/">
+        <p class = "size">
+            Here you can search for gifs by key words.
         </p>
-    </div>
-{% for x in range(json_len)%}
-{% set gif_id = top_8gifs["results"][x]["id"] %}
-{% set gif_itemurl = top_8gifs["results"][x]["itemurl"] %}
-{% set gif_url = top_8gifs["results"][x]["media"][0]["gif"]["url"] %}
-<!-- TODO: Make an HTML form containing a search box and a submit button to add
-    the search term to the query string -->
-
-<form action="">
-    <p>
-        Serch for gifs by key word?
-    <input type="text" name="search_term">
-    <input type="submit">
-    <p>
-</form>
-<!-- TODO: Make a for loop to loop over GIFs passed in from the server -->
-{% for gif in range(10)%}
-<!-- TODO: For each gif, include the 'gif.html' template to display it -->
-{% set gif_id = gifs["results"][gif]["id"] %}
-{% set gif_url = gifs["results"][gif]["media"][0]["gif"]["url"]%}
-{% set gif_itemurl = gifs["results"][gif]["itemurl"]
-    %}
-<div class="tenor-gif-embed" data-postid="{{ gif_id }}" data-share-method="host" data-width="500px"
-    data-aspect-ratio="1.2266666666666666">
-    <a href="{{ gif_itemurl }}"></a>
-    <a href="{{ gif_url }}"></a>
-</div>
-{% endfor %}
-
-
-{% include 'gif.html' %}
-{%endfor%}
-</div>
-<!-- TODO: For each gif, include the 'gif.html' template to display it --
-<!-- TODO: Make a for loop to loop over GIFs passed in from the server -->
+        <input type="text" name="search_term" class = "scale" placeholder="Enter a keyword...">
+        <input type="submit" class = "button" value=" Search Term! ">
+        <form action="/">
+            <input type="submit" class = "button" name="random_term" value="Random Term!">
+        </form>
+    </form>
+    <!-- If there are no gifs to display we tell the user that there are no gifs for that search term.-->
+    {% if gifs == [] %}
+        <title>Gif search </title>
+        <p> No current gifs for word: {{search_term}} </p>
+        
+    {% else %}
+        <div class="gifs">
+            <!-- If there are gifs to display then we tell them the term they searched. -->
+            {% if search_term != "" and search_term != None %}
+                <div>
+                    <p>
+                        Last searched word: {{search_term}}
+                    </p>
+                </div>
+            {% endif %}
+            <!-- Then we loop over each gif in the list gifs and display it.-->
+            {% for gif in gifs %}
+                {% include 'gif.html' %}
+                <br/ >
+            {%endfor%}
+        </div>
+    {% endif %}
 {% endblock %}
-{%endif%}
