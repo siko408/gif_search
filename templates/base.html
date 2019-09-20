@@ -7,8 +7,10 @@
         <link href = "{{ url_for('static', filename='app.css') }}" rel = "stylesheet" type = "text/css">
     </head>
     <body>
+        <div class = "mobile">
         <!-- Here is where base.html will be extended from.-->
         {% block body %}{% endblock %}
         <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        <div>
     </body>
 </html>

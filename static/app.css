@@ -44,3 +44,8 @@ padding: 50px 30px;
 background-image:url("Mic.png");
 background-repeat:no-repeat;
 }
+
+.mobile{
+    border: 5px solid black;
+    border-radius: 12px;
+}
