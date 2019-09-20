@@ -2,20 +2,8 @@ from flask import Flask, render_template, request
 from random import randint
 import requests
 import json
-import os
 
 app = Flask(__name__)
-
-'''
-# TODO: Extract query term from url
-search_term = "dog"
-search_term = request.args.get("search_term")
-# TODO: Make 'params' dict with query term and API key
-params = {"api_key": "LIVDSRZULELA", "query": search_term}
-# TODO: Make an API call to Tenor using the 'requests' library
-request_gifs = requests.get("https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (params["query"], params["api_key"], 10))
-# TODO: Get the first 10 results from the search results
-'''
 
 
 @app.route('/')
@@ -25,15 +13,22 @@ def index():
     random_term = request.args.get("random_term")
 
     if(random_term is not None):
-        search_term = rand_word()
+        try:
+            search_term = rand_word()
+
+        except Exception:
+            return render_template("error.html")
         params = {"api_key": "LIVDSRZULELA", "query": search_term, "limit": 10}
+
     elif(search_term is None):
         params = {"api_key": "LIVDSRZULELA", "query": "", "limit": 10}
+
     else:
         params = {"api_key": "LIVDSRZULELA", "query": search_term, "limit": 10}
 
     try:
         request_gifs = requests.get("https://api.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (params["query"], params["api_key"], params["limit"]))
+
     except Exception:
         return render_template("error.html")
 
